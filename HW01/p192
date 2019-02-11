@@ -1,0 +1,12 @@
+\* p192 *\
+Minimize
+obj: vm_0 + vm_1 + vm_2 + vm_3 + vm_4 + vm_5 + vp_0 + vp_1 + vp_2 + vp_3
+ + vp_4 + vp_5
+Subject To
+c0: - vm_0 + vp_0 + 3 y_0 + 2 y_1 <= 0
+c1: - vm_1 + vp_1 + 2 y_0 + 5 y_1 <= 0
+c2: - vm_2 + vp_2 + y_0 <= 6
+c3: - vm_3 + vp_3 + y_0 >= 4.8
+c4: - vm_4 + vp_4 + y_1 <= 8
+c5: - vm_5 + vp_5 + y_1 >= 6.4
+End
