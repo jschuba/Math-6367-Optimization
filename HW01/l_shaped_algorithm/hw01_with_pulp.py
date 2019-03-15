@@ -1,7 +1,7 @@
 
 
 import numpy as np
-from l_shaped_algorithm_cvx_v2 import L_Shaped_Algorithm
+from l_shaped_algorithm_pulp import L_Shaped_Algorithm
 
 c = np.array([3,2])
 
@@ -39,7 +39,7 @@ def h_driver(x, s):
 
 
 Solver = L_Shaped_Algorithm(c, None, None, None, None, W, h_driver, T_driver, q, s, p,
-                            max_iter = 1, verbose=False, debug=False)
+                            max_iter = 50, verbose=False, debug=False)
 
 x_opt = Solver.solve()
 

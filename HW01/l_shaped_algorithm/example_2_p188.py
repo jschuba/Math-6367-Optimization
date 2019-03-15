@@ -1,8 +1,5 @@
-
-
 import numpy as np
-#from l_shaped_algorithm_pulp_v3 import L_Shaped_Algorithm
-from l_shaped_algorithm_cvx_v2 import L_Shaped_Algorithm
+from l_shaped_algorithm_cvx import L_Shaped_Algorithm
 
 c = np.array([0])
 
@@ -30,10 +27,22 @@ def h_driver(x, s):
     else:
         return np.array([-s])        
 
-
-
-Solver = L_Shaped_Algorithm(c, None, None, A_ineq, b_ineq, W, h_driver, T_driver, q, s, p,
-                            max_iter = 10, verbose=True, debug=False)
-
+Solver = L_Shaped_Algorithm(c = c, 
+                            A_eq = None, 
+                            b_eq = None, 
+                            A_ineq = A_ineq, 
+                            b_ineq = b_ineq, 
+                            W = W, 
+                            h_driver = h_driver, 
+                            T_driver = T_driver, 
+                            q = q, 
+                            realizations = s, 
+                            probabilities = p, 
+                            max_iter = 100, 
+                            precision=10e-6, 
+                            verbose=False, debug=False)
 x_opt = Solver.solve()
+
+print (Solver.value)
+print (Solver.solution)
 
