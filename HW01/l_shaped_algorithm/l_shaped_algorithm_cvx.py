@@ -375,7 +375,7 @@ class L_Shaped_Algorithm(object):
                     self.dot(self.E_list[s], x) + theta >= self.e_list[s] )
                 
         prob = cp.Problem(objective, constraints)
-        result = prob.solve(verbose=self.verbose)
+        result = prob.solve(verbose=self.debug)
             
         if result is None and self.nu == 1:
             self.objective_value_list.append(0)
@@ -443,7 +443,7 @@ class L_Shaped_Algorithm(object):
                                y >= 0]
                            
             prob = cp.Problem(objective, constraints)
-            result = prob.solve(verbose=self.verbose)
+            result = prob.solve(verbose=self.debug)
            
             if np.abs(result) > self.precision:
                 # Then we need to add a feasibility cut
@@ -453,14 +453,16 @@ class L_Shaped_Algorithm(object):
                 sigma = -1 * constraints[0].dual_value
                 sigma = np.array(sigma).reshape(sigma.size)
                 
-                print ("Feasibility cut identified")
-                print ("objective      = ", 
-                       np.round(result, self.print_precision))
-                print ("dual objective = ", 
-                       np.round((h - T @ self.x_nu_list[-1]) @ sigma, 
-                                self.print_precision+1))
-                print ("dual variables = ", 
-                       sigma)
+                print (f"Feasibility cut identified for k={k},")
+                if self.verbose:
+                    print (f"corresponding to realization {self.realizations[k]}")
+                    print ("objective      = ", 
+                           np.round(result, self.print_precision))
+                    print ("dual objective = ", 
+                           np.round((h - T @ self.x_nu_list[-1]) @ sigma, 
+                                    self.print_precision+1))
+                    print ("dual variables = ", 
+                           sigma)
                 
                 D = sigma.T @ T
                 d = sigma.T @ h
@@ -510,16 +512,15 @@ class L_Shaped_Algorithm(object):
                     y >= 0]
 
             prob = cp.Problem(objective, constraints)
-            result = prob.solve(verbose=self.verbose)
+            result = prob.solve(verbose=self.debug)
                        
             # Get the dual variables
             pi = -1 * np.array(constraints[0].dual_value)
             pi = np.array(pi).reshape(pi.size)
                         
-            if self.debug:
+            if self.verbose:
+                print (f"Optimality cut variables for k={k}:")
                 print ("objective       = ", result)
-                print ("dual objective = ", (h - self.dot(self.dot(T, 
-                                                     self.x_nu_list[-1]), pi)))
                 print ("dual variables = ", pi)
 
             E += self.p[k] * pi.T @ T
