@@ -54,10 +54,10 @@ class L_Shaped_Algorithm(object):
     
     W : array_like or matrix, required
     
-    h_driver : function, required
+    h_func : function, required
         Should take two arguements (x, s) and return an array_like. See Notes.
     
-    T_driver : function, required
+    T_func : function, required
         Should take two arguements (x, s) and return an array_like. See Notes.
     
     q : list of array_likes, required
@@ -139,10 +139,10 @@ class L_Shaped_Algorithm(object):
     -----      
     In general, h(w) and T(w) may change depending on the value of the current
     x iterate or the random variable value under consideration.  Therefore, 
-    h(w) and T(w) are specified by driver functions which look like, for 
+    h(w) and T(w) are specified by functions which look like, for 
     example:
     
-    def T_driver(x, s):
+    def T_func(x, s):
         return np.array([[-1,0],
                          [0,-1],
                          [0,0],
@@ -150,7 +150,7 @@ class L_Shaped_Algorithm(object):
                          [0,0],
                          [0,0]])
 
-    def h_driver(x, s):
+    def h_func(x, s):
         return np.array([0, 0, -0.8*s[0], -0.8*s[1], s[0], s[1]])    
         
     Examples
@@ -158,7 +158,7 @@ class L_Shaped_Algorithm(object):
     #The following example solves Example 2 from Page 188 of Birge & Louveaux.
         
     import numpy as np
-    from l_shaped_algorithm_cvx import L_Shaped_Algorithm
+    from l_shaped_algorithm.l_shaped_algorithm import L_Shaped_Algorithm
     
     c = np.array([0])
     
@@ -174,13 +174,13 @@ class L_Shaped_Algorithm(object):
     s = [1,2,4]
     p = [1/3,1/3,1/3]
 
-    def T_driver(x, s):
+    def T_func(x, s):
         if x <= s:
             return np.array([1])
         else:
             return np.array([-1])
             
-    def h_driver(x, s):
+    def h_func(x, s):
         if x <= s:
             return np.array([s])
         else:
@@ -192,8 +192,8 @@ class L_Shaped_Algorithm(object):
                                 A_ineq = A_ineq, 
                                 b_ineq = b_ineq, 
                                 W = W, 
-                                h_driver = h_driver, 
-                                T_driver = T_driver, 
+                                h_func = h_func, 
+                                T_func = T_func, 
                                 q = q, 
                                 realizations = s, 
                                 probabilities = p, 
@@ -207,7 +207,7 @@ class L_Shaped_Algorithm(object):
 
     """
     
-    def __init__(self, c, A_eq, b_eq, A_ineq, b_ineq, W, h_driver, T_driver, q, 
+    def __init__(self, c, A_eq, b_eq, A_ineq, b_ineq, W, h_func, T_func, q, 
                  realizations, probabilities,
                  max_iter = 100, precision=10e-6,
                  verbose=False, debug=False):
@@ -218,8 +218,8 @@ class L_Shaped_Algorithm(object):
         self.A_ineq = A_ineq
         self.b_ineq = b_ineq
         self.W = W
-        self.h_driver = h_driver
-        self.T_driver = T_driver
+        self.h_func = h_func
+        self.T_func = T_func
         self.q = q
         self.realizations = realizations
         self.p = probabilities
@@ -432,8 +432,8 @@ class L_Shaped_Algorithm(object):
             # We use the user-specified driver functions to get the correct
             # matrix T and h for this particular realization of the random
             # variables
-            T = self.T_driver(self.x_nu_list[-1], self.realizations[k])
-            h = self.h_driver(self.x_nu_list[-1], self.realizations[k])
+            T = self.T_func(self.x_nu_list[-1], self.realizations[k])
+            h = self.h_func(self.x_nu_list[-1], self.realizations[k])
             
 
             constraints = [
@@ -502,8 +502,8 @@ class L_Shaped_Algorithm(object):
             # We use the user-specified driver functions to get the correct
             # matrix T and h for this particular realization of the random
             # variables
-            T = self.T_driver(self.x_nu_list[-1], self.realizations[k])
-            h = self.h_driver(self.x_nu_list[-1], self.realizations[k])
+            T = self.T_func(self.x_nu_list[-1], self.realizations[k])
+            h = self.h_func(self.x_nu_list[-1], self.realizations[k])
 
             # Define the objective function and constraints
             objective = cp.Minimize(self.dot(self.q[k], y[0:len(self.q[k])]))

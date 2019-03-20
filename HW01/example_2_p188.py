@@ -1,5 +1,5 @@
 import numpy as np
-from l_shaped_algorithm_cvx import L_Shaped_Algorithm
+from l_shaped_algorithm.l_shaped_algorithm import L_Shaped_Algorithm
 
 c = np.array([0])
 
@@ -15,13 +15,13 @@ q = [[1],[1],[1]]
 s = [1,2,4]
 p = [1/3,1/3,1/3]
 
-def T_driver(x, s):
+def T_func(x, s):
     if x <= s:
         return np.array([1])
     else:
         return np.array([-1])
         
-def h_driver(x, s):
+def h_func(x, s):
     if x <= s:
         return np.array([s])
     else:
@@ -33,8 +33,8 @@ Solver = L_Shaped_Algorithm(c = c,
                             A_ineq = A_ineq, 
                             b_ineq = b_ineq, 
                             W = W, 
-                            h_driver = h_driver, 
-                            T_driver = T_driver, 
+                            h_func = h_func, 
+                            T_func = T_func, 
                             q = q, 
                             realizations = s, 
                             probabilities = p, 

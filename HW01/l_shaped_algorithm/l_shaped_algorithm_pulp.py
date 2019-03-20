@@ -23,7 +23,7 @@ class L_Shaped_Algorithm():
     
     """
     
-    def __init__(self, c, A_eq, b_eq, A_ineq, b_ineq, W, h_driver, T_driver, q, 
+    def __init__(self, c, A_eq, b_eq, A_ineq, b_ineq, W, h_func, T_func, q, 
                  realizations, probabilities, 
                  max_iter = 100, precision=10e-4, 
                  verbose=False, debug=False):
@@ -34,8 +34,8 @@ class L_Shaped_Algorithm():
         self.A_ineq = A_ineq
         self.b_ineq = b_ineq
         self.W = W
-        self.h_driver = h_driver
-        self.T_driver= T_driver
+        self.h_func = h_func
+        self.T_func= T_func
         self.q = q
         self.realizations = realizations
         self.p = probabilities
@@ -240,8 +240,8 @@ class L_Shaped_Algorithm():
             # We use the user-specified driver functions to get the correct
             # matrix T and h for this particular realization of the random
             # variables
-            T = self.T_driver(self.x_nu[-1], self.realizations[k])
-            h = self.h_driver(self.x_nu[-1], self.realizations[k])
+            T = self.T_func(self.x_nu[-1], self.realizations[k])
+            h = self.h_func(self.x_nu[-1], self.realizations[k])
 
             # Define constraints of the type Wy + vp - vm == h[k] - T[k]x
             for i in range(n):
@@ -323,8 +323,8 @@ class L_Shaped_Algorithm():
             # We use the user-specified driver functions to get the correct
             # matrix T and h for this particular realization of the random
             # variables
-            T = self.T_driver(self.x_nu[-1], self.realizations[k])
-            h = self.h_driver(self.x_nu[-1], self.realizations[k])
+            T = self.T_func(self.x_nu[-1], self.realizations[k])
+            h = self.h_func(self.x_nu[-1], self.realizations[k])
 
             for i in range(n):
                 prob += ( lp.lpDot(self.W[i], y) == 

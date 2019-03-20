@@ -1,7 +1,7 @@
 
 
 import numpy as np
-from l_shaped_algorithm_pulp import L_Shaped_Algorithm
+from l_shaped_algorithm.l_shaped_algorithm_pulp import L_Shaped_Algorithm
 
 c = np.array([3,2])
 
@@ -25,7 +25,7 @@ for s1 in [6,4]:
 
 
 
-def T_driver(x, s):
+def T_func(x, s):
     return np.array([[-1,0],
                      [0,-1],
                      [0,0],
@@ -33,12 +33,12 @@ def T_driver(x, s):
                      [0,0],
                      [0,0]])
 
-def h_driver(x, s):
+def h_func(x, s):
     return np.array([0, 0, -0.8*s[0], -0.8*s[1], s[0], s[1]])        
 
 
 
-Solver = L_Shaped_Algorithm(c, None, None, None, None, W, h_driver, T_driver, q, s, p,
+Solver = L_Shaped_Algorithm(c, None, None, None, None, W, h_func, T_func, q, s, p,
                             max_iter = 50, verbose=False, debug=False)
 
 x_opt = Solver.solve()
