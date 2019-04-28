@@ -73,7 +73,6 @@ failure_prob = [[0.8, 0.75, 0.90],
 # Transpose the failure matrix, so that we can index it by [course][hours]
 failure_prob = np.transpose(failure_prob)
 
-
 print_failure_matrix(failure_prob, courses)
 
 f, f_arg = backward_dp(failure_prob)
