@@ -1,4 +1,3 @@
-
 import numpy as np
 import pandas as pd
 
@@ -39,11 +38,16 @@ def forward_strategy(f, f_arg):
     strategy = [0 for _ in f]
     
     hours_remaining = len(f[0])-1
+    print(f"Working on forward strategy")
     
     for k in range(len(f)-1, -1, -1):
+        print(f"{hours_remaining} hours remaining")
+        print(f"Considering course {k}")
         hours_to_spend = f_arg[k][hours_remaining]
+        print(f"Spending {hours_to_spend} hours")
         strategy[k] = hours_to_spend
         hours_remaining -= hours_to_spend
+        
     
     strategy.reverse()
     return prob_of_failing_all_courses, strategy
@@ -58,6 +62,12 @@ def print_failure_matrix(failure_matrix, course_list):
     
 #if __name__ == "__main__":
 #    main()
+    
+def check(failure_matrix, strategy):
+    prob_of_failing_all_courses = 1
+    for course, hours  in enumerate(strategy):
+        prob_of_failing_all_courses *= failure_matrix[course][hours]
+    return prob_of_failing_all_courses
 
 courses = ["Algebra", "Geometry", "Optimization"]
 print("Note: The courses are indexed:")
@@ -78,6 +88,8 @@ print_failure_matrix(failure_prob, courses)
 f, f_arg = backward_dp(failure_prob)
 
 prob_of_failing_all_courses, strategy = forward_strategy(f, f_arg)
+
+check_prob = check(failure_prob, strategy)
 
 print(f"The probability of failing all courses is: {prob_of_failing_all_courses}")
 print("The optimal strategy is to spend:")
